@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Romantic Web App ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: url('background.jpg') no-repeat center center;
+    background-size: cover;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
+    color: white;
+    cursor: pointer;
+}
+
+/* Floating hearts */
+.heart {
+    position: absolute;
+    color: rgba(255,105,180,0.6);
+    animation: floatUp 8s linear infinite;
+    pointer-events: none;
+}
+@keyframes floatUp {
+    from { transform: translateY(100vh); opacity: 0; }
+    to { transform: translateY(-10vh); opacity: 1; }
+}
+
+/* Layout */
+#container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 650px;
+    text-align: center;
+    z-index: 10;
+}
+
+.card {
+    background: rgba(0,0,0,0.4);
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 0 25px rgba(255,105,180,0.35);
+    position: relative;
+    z-index: 10;
+}
+
+h1 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+#text {
+    font-size: 18px;
+    line-height: 1.8;
+    min-height: 220px;
+}
+
+/* Buttons */
+button {
+    margin-top: 25px;
+    padding: 14px 28px;
+    font-size: 17px;
+    border-radius: 25px;
+    border: none;
+    background: #ff69b4;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 15px #ff69b4;
+}
+
+.choice {
+    margin: 10px;
+}
+
+/* Mobile */
+@media (max-width: 500px) {
+    #text { font-size: 16px; }
+    h1 { font-size: 22px; }
+    button { font-size: 16px; padding: 12px 24px; }
+}
+</style>
+</head>
+
+<body id="body">
+
+<!-- Single background music -->
+<audio id="bgmusic" src="my.mp3" loop></audio>
+
+<div id="container">
+    <h1>In the Quiet Rhythm of My Life, You Became bright sunshine✨</h1>
+    <div class="card">
+        <div id="text">Tap anywhere to start 💖</div>
+    </div>
+</div>
+
+<script>
+/* Floating hearts */
+setInterval(() => {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤️";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.fontSize = Math.random() * 12 + 14 + "px";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 8000);
+}, 500);
+
+/* Love note */
+const part1 = "Just like the quiet love hidden between the pages of a Sinhala novel, my feelings for you grew silently but endlessly. " +
+"You became the sentence my heart repeats, the meaning behind every pause. In your presence, words become unnecessary—my heart already understands. " +
+"I don’t know how our story will unfold, but I know this… I want to live every page of it with you.";
+const finalQuestion = "Would you let me love you? ❤️";
+
+const textEl = document.getElementById("text");
+const body = document.getElementById("body");
+const bgmusic = document.getElementById("bgmusic");
+
+let charIndex = 0;
+
+/* Typewriter effect */
+function typeText(text, callback) {
+    charIndex = 0;
+    textEl.innerHTML = "";
+
+    function type() {
+        if (charIndex < text.length) {
+            textEl.innerHTML += text[charIndex];
+            charIndex++;
+            setTimeout(type, 40);
+        } else {
+            if (callback) callback();
+        }
+    }
+    type();
+}
+
+/* Show final choice buttons */
+function showChoices() {
+    setTimeout(() => {
+        textEl.innerHTML += `
+            <br><br>
+            <button class="choice" onclick="yes()">Yes 💖</button>
+            <button class="choice" onclick="wait()">I need time 🤍</button>
+        `;
+    }, 500);
+}
+
+function yes() {
+    textEl.innerHTML = "You just made my heart incredibly happy 💕<br>This is the beginning of something truly beautiful.";
+}
+
+function wait() {
+    textEl.innerHTML = "That’s okay 🤍<br>True feelings never rush. I respect you and your pace.";
+}
+
+/* Start music and sequence on first tap */
+let started = false;
+body.addEventListener('click', () => {
+    if (started) return;
+    started = true;
+
+    bgmusic.volume = 0.5;
+    bgmusic.play().catch(() => {
+        console.log("Mobile autoplay requires user interaction.");
+    });
+
+    typeText(part1, () => {
+        setTimeout(() => {
+            typeText(finalQuestion, showChoices);
+        }, 1000);
+    });
+});
+</script>
+
+</body>
+</html>
